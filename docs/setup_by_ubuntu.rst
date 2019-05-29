@@ -30,11 +30,6 @@
     $ apt-get update && apt-get -y upgrade
     $ apt-get -y install wget gcc libffi-dev git libmysqlclient-dev
 
-    # 修改字符集, 否则可能报 input/output error的问题, 因为日志里打印了中文
-    $ apt-get -y install language-pack-zh-hans
-    $ export LC_ALL=zh_CN.UTF-8
-    $ echo 'LANG="zh_CN.UTF-8"' > /etc/default/locale
-
 **1.2 安装 Python3.6**
 
 .. code-block:: shell
@@ -323,10 +318,10 @@ Luna 已改为纯前端, 需要 Nginx 来运行访问
 .. code-block:: shell
 
     $ cd /opt/
-    $ wget https://github.com/jumpserver/luna/releases/download/1.4.10/luna.tar.gz
+    $ wget https://github.com/jumpserver/luna/releases/download/1.5.0/luna.tar.gz
 
     # 如果网络有问题导致下载无法完成可以使用下面地址
-    $ wget https://demo.jumpserver.org/download/luna/1.4.10/luna.tar.gz
+    $ wget https://demo.jumpserver.org/download/luna/1.5.0/luna.tar.gz
 
     $ tar xf luna.tar.gz
     $ chown -R root:root luna

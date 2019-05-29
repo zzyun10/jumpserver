@@ -31,11 +31,6 @@
     $ setenforce 0
     $ sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
 
-    # 修改字符集, 否则可能报 input/output error的问题, 因为日志里打印了中文
-    $ localedef -c -f UTF-8 -i zh_CN zh_CN.UTF-8
-    $ export LC_ALL=zh_CN.UTF-8
-    $ echo 'LANG="zh_CN.UTF-8"' > /etc/locale.conf
-
 一. 准备 Python3 和 Python 虚拟环境
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -343,10 +338,10 @@ Luna 已改为纯前端, 需要 Nginx 来运行访问
 .. code-block:: shell
 
     $ cd /opt
-    $ wget https://github.com/jumpserver/luna/releases/download/1.4.10/luna.tar.gz
+    $ wget https://github.com/jumpserver/luna/releases/download/1.5.0/luna.tar.gz
 
     # 如果网络有问题导致下载无法完成可以使用下面地址
-    $ wget https://demo.jumpserver.org/download/luna/1.4.10/luna.tar.gz
+    $ wget https://demo.jumpserver.org/download/luna/1.5.0/luna.tar.gz
 
     $ tar xf luna.tar.gz
     $ chown -R root:root luna
