@@ -269,7 +269,7 @@ class Config(dict):
         'CHANGE_AUTH_PLAN_SECURE_MODE_ENABLED': True,
         'USER_LOGIN_SINGLE_MACHINE_ENABLED': False,
         'TICKETS_ENABLED': True,
-        'SEND_COMMAND_ALERT_EMAIL_ENABLED': False,
+        'SEND_COMMAND_ALERT_EMAIL_ENABLED': True,
         'INSECURE_COMMAND_LEVEL': 5
     }
 
