@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 #
+import json
 import time
+
+from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.fields import DateTimeField
@@ -13,13 +17,15 @@ from django.template import loader
 from orgs.utils import current_org
 from common.permissions import IsOrgAdminOrAppUser, IsOrgAuditor
 from common.utils import get_logger
+from terminal.utils import send_command_alert_mail
+
 from ..backends import (
     get_command_storage, get_multi_command_storage,
     SessionCommandSerializer,
 )
 
 logger = get_logger(__name__)
-__all__ = ['CommandViewSet', 'CommandExportApi']
+__all__ = ['CommandViewSet', 'CommandExportApi', 'insecure_command_alert_api']
 
 
 class CommandQueryMixin:
@@ -134,3 +140,19 @@ class CommandExportApi(CommandQueryMixin, generics.ListAPIView):
         filename = 'command-report-{}.html'.format(int(time.time()))
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         return response
+
+
+@csrf_exempt
+def insecure_command_alert_api(request):
+    if request.method == 'POST':
+        commands = json.loads(request.body)
+        for command in commands:
+            if command['risk_level'] >= settings.INSECURE_COMMAND_LEVEL and \
+                    settings.SEND_COMMAND_ALERT_EMAIL_ENABLED:
+                try:
+                    send_command_alert_mail(command)
+                except Exception as e:
+                    logger.error(e)
+        return HttpResponse("ok")
+    else:
+        return HttpResponse("request method error")
