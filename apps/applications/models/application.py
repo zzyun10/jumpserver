@@ -1,5 +1,8 @@
+import jinja2
+import yaml
+
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, get_language
 
 from orgs.mixins.models import OrgModelMixin
 from common.mixins import CommonModelMixin
@@ -35,3 +38,39 @@ class Application(CommonModelMixin, OrgModelMixin):
     @property
     def category_remote_app(self):
         return self.category == const.ApplicationCategoryChoices.remote_app.value
+
+
+class RemoteAppType(CommonModelMixin):
+    name = models.CharField(max_length=128)
+    label = models.CharField(max_length=128)
+    description = models.TextField()
+    author = models.CharField(max_length=128)
+    company = models.CharField(max_length=128, blank=True, null=True)
+    license = models.CharField(max_length=128, blank=True, null=True)
+    tags = models.JSONField()
+    path = models.CharField()
+
+    @property
+    def params(self):
+        return {}
+
+    @property
+    def i18n(self):
+        return {}
+
+    def generate_params_serializer(self):
+        from common.drf.serializers import DefinitionSerializerFactory
+
+        cls_name = 'RemoteApp{}Serializer'.format(self.name.title())
+        lang = get_language()
+        serializer = DefinitionSerializerFactory.generate_serializer_by_param(
+            cls_name, self.params, i18n_data=self.i18n, lang=lang
+        )
+        return serializer
+
+    @classmethod
+    def load_from_tarball(cls, path):
+        pass
+
+    def __str__(self):
+        return f'{self.name}({self.display_name})'

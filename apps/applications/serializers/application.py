@@ -21,6 +21,9 @@ class ApplicationSerializerMixin(serializers.Serializer):
         request = self.context['request']
         query_type = request.query_params.get('type')
         query_category = request.query_params.get('category')
+        # from ..models import RemoteAppType
+        # return RemoteAppType.objects.first().generate_params_serializer()
+
         if query_type:
             serializer_class = type_serializer_classes_mapping.get(query_type)
         elif query_category:

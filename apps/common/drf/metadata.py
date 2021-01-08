@@ -20,7 +20,7 @@ class SimpleMetadataWithFilters(SimpleMetadata):
     methods = {"PUT", "POST", "GET"}
     attrs = [
         'read_only', 'label', 'help_text',
-        'min_length', 'max_length',
+        'min_length', 'max_length', 'initial',
         'min_value', 'max_value', "write_only"
     ]
 
