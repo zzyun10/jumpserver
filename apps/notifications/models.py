@@ -31,6 +31,9 @@ class Backend(models.Model):
 class Message(models.Model):
     app = models.CharField(max_length=64, default='', db_index=True)
     message = models.CharField(max_length=128, default='', db_index=True)
+    users = models.ManyToManyField('users.User', related_name='subscriptions')
+    groups = models.ManyToManyField('users.UserGroup', related_name='subscriptions')
+    receive_backends = models.ManyToManyField(Backend, related_name='subscriptions')
 
     @property
     def message_label(self):
@@ -43,29 +46,6 @@ class Message(models.Model):
     def app_label(self):
         app_config = apps.get_app_config(self.app)
         return app_config.verbose_name
-
-
-class Subscription(models.Model):
-    users = models.ManyToManyField('users.User', related_name='subscriptions')
-    groups = models.ManyToManyField('users.UserGroup', related_name='subscriptions')
-    messages = models.ManyToManyField(Message, related_name='subscriptions')
-    receive_backends = models.ManyToManyField(Backend, related_name='subscriptions')
-
-    @property
-    def users_amount(self):
-        return self.users.count()
-
-    @property
-    def groups_amount(self):
-        return self.groups.count()
-
-    @property
-    def messages_amount(self):
-        return self.messages.count()
-
-    @property
-    def receive_backends_amount(self):
-        return self.receive_backends.count()
 
     @property
     def receivers(self):

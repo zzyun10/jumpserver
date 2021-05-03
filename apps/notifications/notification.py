@@ -1,10 +1,11 @@
+from itertools import chain
 from typing import Iterable
 from collections import defaultdict
 import traceback
 
 from celery import shared_task
 
-from .models import Subscription, Backend
+from .models import Backend, Message
 
 BACKEND = Backend.BACKEND
 
@@ -28,25 +29,24 @@ class MessageBase:
 
     @classmethod
     def publish(cls, **data):
-        backend_user_mapper = defaultdict(list)
-        subscriptions = Subscription.objects.filter(
-            messages__app=cls.app_label,
-            messages__message=cls.__name__,
-        ).distinct().prefetch_related('users', 'groups__users', 'receive_backends')
+        msg = Message.objects.filter(
+            app=cls.app_label, message=cls.__name__
+        ).first().prefetch_related('users', 'groups__users', 'receive_backends')
 
-        for subscription in subscriptions:
-            for backend in subscription.receive_backends.all():
-                backend_user_mapper[backend.name].extend(subscription.users.all())
+        if not msg:
+            return
 
-                for group in subscription.groups.all():
-                    backend_user_mapper[backend.name].extend(group.users.all())
+        backend_names = [b.name for b in msg.receive_backends.all()]
+        users = [
+            *msg.users.all(),
+            *chain(*[g.users.all() for g in msg.groups.all()])
+        ]
 
         client = cls()
-        for backend, users in backend_user_mapper.items():
-            try:
-                client.send_msg(data, users, [backend])
-            except Exception:
-                traceback.print_exc()
+        try:
+            client.send_msg(data, users, backend_names)
+        except Exception:
+            traceback.print_exc()
 
     def send_msg(self, data: dict, users: Iterable, backends: Iterable = BACKEND):
         for backend in backends:
