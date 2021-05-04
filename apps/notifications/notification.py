@@ -29,9 +29,9 @@ class MessageBase:
 
     @classmethod
     def publish(cls, **data):
-        msg = Message.objects.filter(
+        msg = Message.objects.get(
             app=cls.app_label, message=cls.__name__
-        ).first().prefetch_related('users', 'groups__users', 'receive_backends')
+        )
 
         if not msg:
             return
@@ -43,24 +43,24 @@ class MessageBase:
         ]
 
         client = cls()
-        try:
-            client.send_msg(data, users, backend_names)
-        except Exception:
-            traceback.print_exc()
+        client.send_msg(data, users, backend_names)
 
     def send_msg(self, data: dict, users: Iterable, backends: Iterable = BACKEND):
         for backend in backends:
-            backend = BACKEND(backend)
+            try:
+                backend = BACKEND(backend)
 
-            get_msg_method_name = f'get_{backend}_msg'
-            get_msg_method = getattr(self, get_msg_method_name)
-            msg = get_msg_method(**data)
-            client = backend.client()
+                get_msg_method_name = f'get_{backend}_msg'
+                get_msg_method = getattr(self, get_msg_method_name)
+                msg = get_msg_method(**data)
+                client = backend.client()
 
-            if isinstance(msg, dict):
-                client.send_msg(users, **msg)
-            else:
-                client.send_msg(users, msg)
+                if isinstance(msg, dict):
+                    client.send_msg(users, **msg)
+                else:
+                    client.send_msg(users, msg)
+            except:
+                traceback.print_exc()
 
     def get_common_msg(self, **data):
         raise NotImplementedError
