@@ -28,6 +28,16 @@ class Backend(models.Model):
     name = models.CharField(max_length=64, choices=BACKEND.choices, default='', db_index=True)
 
 
+def get_backend_user_id(user, backend):
+    mapper = {
+        Backend.BACKEND.WECOM: 'wecom_id',
+        Backend.BACKEND.DINGTALK: 'dingtalk_id',
+        Backend.BACKEND.EMAIL: 'email'
+    }
+    id = getattr(user, mapper[backend])
+    return id
+
+
 class Message(models.Model):
     app = models.CharField(max_length=64, default='', db_index=True)
     message = models.CharField(max_length=128, default='', db_index=True)
@@ -61,7 +71,7 @@ class Message(models.Model):
         for user in users:
             recevier = {'name': str(user)}
             for backend_name in backend_names:
-                recevier[backend_name] = bool(getattr(user, f'{backend_name}_id'))
+                recevier[backend_name] = bool(get_backend_user_id(user, backend_name))
             receviers.append(recevier)
 
         return receviers
