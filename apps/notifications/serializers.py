@@ -21,3 +21,6 @@ class MessageSerializer(BulkModelSerializer):
         read_only_fields = (
             'app', 'message', 'app_label', 'message_label', 'receivers'
         )
+        extra_kwargs = {
+            'users': {'allow_empty': True}
+        }

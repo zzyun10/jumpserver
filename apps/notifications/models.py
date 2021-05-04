@@ -49,9 +49,19 @@ class Message(models.Model):
 
     @property
     def receivers(self):
-        receivers = [str(user) for user in self.users.all()]
+        users = [user for user in self.users.all()]
 
         for group in self.groups.all():
             for user in group.users.all():
-                receivers.append(str(user))
-        return receivers
+                users.append(user)
+
+        backend_names = [b.name for b in self.receive_backends.all()]
+        receviers = []
+
+        for user in users:
+            recevier = {'name': str(user)}
+            for backend_name in backend_names:
+                recevier[backend_name] = bool(getattr(user, f'{backend_name}_id'))
+            receviers.append(recevier)
+
+        return receviers
