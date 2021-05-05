@@ -8,7 +8,6 @@ logger = get_logger(__name__)
 
 
 class CommandAlertMessage(MessageBase):
-    app_label = 'terminal'
     message_label = 'Command Alert'
 
     def get_common_msg(self, command):
@@ -62,7 +61,6 @@ class CommandAlertMessage(MessageBase):
                                           external=True, api_to_ui=True),
         }
 
-        logger.debug(message)
         return {
             'subject': subject,
             'message': message

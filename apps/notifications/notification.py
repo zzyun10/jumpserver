@@ -16,7 +16,6 @@ def publish_task(note, data):
 
 
 class MessageBase:
-    app_label: str
     message_label: str
 
     @property
@@ -29,9 +28,7 @@ class MessageBase:
 
     @classmethod
     def publish(cls, **data):
-        msg = Message.objects.get(
-            app=cls.app_label, message=cls.__name__
-        )
+        msg = Message.objects.get(message=cls.__name__)
 
         if not msg:
             return
