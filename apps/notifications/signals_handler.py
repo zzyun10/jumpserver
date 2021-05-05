@@ -6,6 +6,9 @@ from django.dispatch import receiver
 
 from .notification import MessageBase
 from .models import Message, Backend
+from common.utils import get_logger
+
+logger = get_logger(__file__)
 
 
 @receiver(post_migrate, dispatch_uid='notifications.signals_handler.create_notifications_type')
@@ -32,13 +35,11 @@ def create_notifications_type(app_config, **kwargs):
                 continue
 
             if issubclass(obj, MessageBase):
-                msg_name = obj.__name__
-                if msg_name in searched_msgs:
-                    raise ValueError(f'{msg_name} must be unique')
-                searched_msgs.add(msg_name)
+                searched_msgs.add(obj.__name__)
 
         msgs = searched_msgs - all_msgs
         msgs = [Message(app=app_label, message=m) for m in msgs]
+        logger.debug(f'Create messages {msgs}')
         Message.objects.bulk_create(msgs)
 
     except ModuleNotFoundError:

@@ -22,5 +22,6 @@ class MessageSerializer(BulkModelSerializer):
             'app', 'message', 'app_label', 'message_label', 'receivers'
         )
         extra_kwargs = {
-            'users': {'allow_empty': True}
+            'users': {'allow_empty': True},
+            'receive_backends': {'allow_empty': True}
         }

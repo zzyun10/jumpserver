@@ -40,10 +40,16 @@ def get_backend_user_id(user, backend):
 
 class Message(models.Model):
     app = models.CharField(max_length=64, default='')
-    message = models.CharField(max_length=128, default='', unique=True)
+    message = models.CharField(max_length=128, unique=True)
     users = models.ManyToManyField('users.User', related_name='subscriptions')
     groups = models.ManyToManyField('users.UserGroup', related_name='subscriptions')
     receive_backends = models.ManyToManyField(Backend, related_name='subscriptions')
+
+    def __str__(self):
+        return f'{self.app} -> {self.message}'
+
+    def __repr__(self):
+        return self.__str__()
 
     @property
     def message_label(self):
