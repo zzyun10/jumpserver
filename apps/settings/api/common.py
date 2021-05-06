@@ -127,6 +127,7 @@ class PublicSettingApi(generics.RetrieveAPIView):
                     'SECURITY_PASSWORD_SPECIAL_CHAR': settings.SECURITY_PASSWORD_SPECIAL_CHAR,
                 },
                 "AUTH_WECOM": settings.AUTH_WECOM,
+                "AUTH_DINGTALK": settings.AUTH_DINGTALK,
             }
         }
         return instance
