@@ -12,24 +12,24 @@ from authentication import errors
 logger = get_logger(__file__)
 
 
-class WeComQRUnBindBase(APIView):
+class DingTalkQRUnBindBase(APIView):
     user: User
 
     def post(self, request: Request, **kwargs):
         user = self.user
 
-        if not user.wecom_id:
-            raise errors.WeComNotBound
+        if not user.dingtalk_id:
+            raise errors.DingTalkNotBound
 
-        user.wecom_id = ''
+        user.dingtalk_id = ''
         user.save()
         return Response()
 
 
-class WeComQRUnBindForUserApi(RoleUserMixin, WeComQRUnBindBase):
+class DingTalkQRUnBindForUserApi(RoleUserMixin, DingTalkQRUnBindBase):
     permission_classes = (IsAuthPasswdTimeValid,)
 
 
-class WeComQRUnBindForAdminApi(RoleAdminMixin, WeComQRUnBindBase):
+class DingTalkQRUnBindForAdminApi(RoleAdminMixin, DingTalkQRUnBindBase):
     user_id_url_kwarg = 'user_id'
     permission_classes = (IsOrgAdmin,)

@@ -17,6 +17,9 @@ urlpatterns = [
     path('wecom/qr/unbind/', api.WeComQRUnBindForUserApi.as_view(), name='wecom-qr-unbind'),
     path('wecom/qr/unbind/<uuid:user_id>/', api.WeComQRUnBindForAdminApi.as_view(), name='wecom-qr-unbind-for-admin'),
 
+    path('dingtalk/qr/unbind/', api.DingTalkQRUnBindForUserApi.as_view(), name='dingtalk-qr-unbind'),
+    path('dingtalk/qr/unbind/<uuid:user_id>/', api.DingTalkQRUnBindForAdminApi.as_view(), name='dingtalk-qr-unbind-for-admin'),
+
     path('auth/', api.TokenCreateApi.as_view(), name='user-auth'),
     path('tokens/', api.TokenCreateApi.as_view(), name='auth-token'),
     path('mfa/challenge/', api.MFAChallengeApi.as_view(), name='mfa-challenge'),

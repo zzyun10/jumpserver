@@ -2,6 +2,7 @@ import requests
 
 from rest_framework.views import Response
 from rest_framework.generics import GenericAPIView
+from django.utils.translation import gettext_lazy as _
 
 from common.permissions import IsSuperUser
 from common.message.backends.wecom import URL
@@ -32,6 +33,6 @@ class WeComTestingAPI(GenericAPIView):
             if errcode != 0:
                 return Response(status=400, data={'error': data['errmsg']})
 
-            return Response(status=200)
+            return Response(status=200, data={'msg': _('OK')})
         except Exception as e:
             return Response(status=400, data={'error': str(e)})

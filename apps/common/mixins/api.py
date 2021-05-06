@@ -11,6 +11,7 @@ from django.db.models.signals import m2m_changed
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.utils.translation import ugettext as _
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.decorators import action
@@ -26,7 +27,7 @@ __all__ = [
 ]
 
 
-UserModel = settings.AUTH_USER_MODEL
+UserModel = get_user_model()
 
 
 class JSONResponseMixin(object):

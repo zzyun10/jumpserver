@@ -310,6 +310,11 @@ class WeComNotBound(JMSException):
     default_detail = 'WeCom is not bound'
 
 
+class DingTalkNotBound(JMSException):
+    default_code = 'dingtalk_not_bound'
+    default_detail = 'DingTalk is not bound'
+
+
 class PasswdInvalid(JMSException):
     default_code = 'passwd_invalid'
     default_detail = _('Your password is invalid')
