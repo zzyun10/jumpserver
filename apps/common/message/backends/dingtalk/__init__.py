@@ -166,16 +166,3 @@ class DingTalk:
 
         data = self._request.post(URL.GET_SEND_MSG_PROGRESS, json=body, with_token=True)
         return data
-
-
-def test():
-    from django.conf import settings
-
-    req = DingTalkRequests(
-        appid=settings.DINGTALK_APPKEY,
-        appsecret=settings.DINGTALK_APPSECRET,
-        agentid=settings.DINGTALK_AGENTID
-    )
-
-    return req
-
