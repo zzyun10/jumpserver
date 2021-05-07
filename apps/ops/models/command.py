@@ -107,7 +107,7 @@ class CommandExecution(OrgModelMixin):
                 'user': str(self.user),
                 'risk_level': 5,
             }
-            CommandExecutionAlert.publish(command=command)
+            CommandExecutionAlert.publish_async(command=command)
             send_command_execution_alert_mail(command)
             self.result = {"error":  msg}
         self.org_id = self.run_as.org_id

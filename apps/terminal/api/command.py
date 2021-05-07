@@ -210,5 +210,5 @@ class InsecureCommandAlertAPI(generics.CreateAPIView):
                     settings.SECURITY_INSECURE_COMMAND and \
                     settings.SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER:
                 send_command_alert_mail(command)
-                CommandAlertMessage.publish(command=command)
+                CommandAlertMessage.publish_async(command=command)
         return Response()
