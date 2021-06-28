@@ -150,7 +150,10 @@ class UnionQuerySet(QuerySet):
             attr = partial(self.__before_union_perform, item)
         return attr
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: slice):
+        if isinstance(item, slice):
+            if (item.stop - item.start) <= 0:
+                return self.model.objects.none()
         return self.__execute()[item]
 
     def __iter__(self):
