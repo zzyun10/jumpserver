@@ -220,8 +220,8 @@ class SystemUser(ProtocolMixin, AuthMixin, BaseUser):
     nodes = models.ManyToManyField('assets.Node', blank=True, verbose_name=_("Nodes"))
     assets = models.ManyToManyField(
         'assets.Asset', blank=True, verbose_name=_("Assets"),
-        through='assets.AuthBook', through_fields=['systemuser', 'asset'],
-        related_name='system_users'
+        # through='assets.AuthBook', through_fields=['systemuser', 'asset'],
+        # related_name='system_users'
     )
     users = models.ManyToManyField('users.User', blank=True, verbose_name=_("Users"))
     groups = models.ManyToManyField('users.UserGroup', blank=True, verbose_name=_("User groups"))

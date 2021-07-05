@@ -7,22 +7,22 @@ from common.utils import get_logger
 from orgs.utils import tmp_to_root_org
 from ..models import AuthBook, SystemUser
 
-AuthBookHistory = apps.get_model('assets', 'HistoricalAuthBook')
+# AuthBookHistory = apps.get_model('assets', 'HistoricalAuthBook')
 logger = get_logger(__name__)
 
 
-@receiver(pre_create_historical_record, sender=AuthBookHistory)
-def pre_create_historical_record_callback(sender, instance=None, history_instance=None, **kwargs):
-    attrs_to_copy = ['username', 'password', 'private_key']
-
-    for attr in attrs_to_copy:
-        if getattr(history_instance, attr):
-            continue
-        if not history_instance.systemuser:
-            continue
-        system_user_attr_value = getattr(history_instance.systemuser, attr)
-        if system_user_attr_value:
-            setattr(history_instance, attr, system_user_attr_value)
+# @receiver(pre_create_historical_record, sender=AuthBookHistory)
+# def pre_create_historical_record_callback(sender, instance=None, history_instance=None, **kwargs):
+#     attrs_to_copy = ['username', 'password', 'private_key']
+#
+#     for attr in attrs_to_copy:
+#         if getattr(history_instance, attr):
+#             continue
+#         if not history_instance.systemuser:
+#             continue
+#         system_user_attr_value = getattr(history_instance.systemuser, attr)
+#         if system_user_attr_value:
+#             setattr(history_instance, attr, system_user_attr_value)
 
 
 @receiver(post_save, sender=AuthBook)

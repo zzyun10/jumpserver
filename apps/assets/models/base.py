@@ -179,29 +179,6 @@ class BaseUser(OrgModelMixin, AuthMixin):
     date_updated = models.DateTimeField(auto_now=True, verbose_name=_("Date updated"))
     created_by = models.CharField(max_length=128, null=True, verbose_name=_('Created by'))
 
-    ASSETS_AMOUNT_CACHE_KEY = "ASSET_USER_{}_ASSETS_AMOUNT"
-    ASSET_USER_CACHE_TIME = 600
-
-    def get_related_assets(self):
-        assets = self.assets.filter(org_id=self.org_id)
-        return assets
-
-    def get_username(self):
-        return self.username
-
-    @lazyproperty
-    def assets_amount(self):
-        cache_key = self.ASSETS_AMOUNT_CACHE_KEY.format(self.id)
-        cached = cache.get(cache_key)
-        if not cached:
-            cached = self.get_related_assets().count()
-            cache.set(cache_key, cached, self.ASSET_USER_CACHE_TIME)
-        return cached
-
-    def expire_assets_amount(self):
-        cache_key = self.ASSETS_AMOUNT_CACHE_KEY.format(self.id)
-        cache.delete(cache_key)
-
     def _to_secret_json(self):
         """Push system user use it"""
         return {

@@ -191,7 +191,7 @@ class Asset(AbsConnectivity, ProtocolsMixin, NodesRelationMixin, OrgModelMixin):
     is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
 
     # Auth
-    _admin_user = models.ForeignKey('assets.AdminUser', on_delete=models.PROTECT, null=True, verbose_name=_("Admin user"), related_name='assets')
+    admin_user = models.ForeignKey('assets.AdminUser', on_delete=models.PROTECT, null=True, verbose_name=_("Admin user"), related_name='assets')
 
     # Some information
     public_ip = models.CharField(max_length=128, blank=True, null=True, verbose_name=_('Public IP'))
